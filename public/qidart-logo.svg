@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="270" height="90" viewBox="0 0 270 90" fill="none">
+  <path d="M14 43.5 42 15l28 28.5V75H14V43.5Z" stroke="#173C50" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M42 64.5 28.8 52.3c-7.5-7.2 3.2-17.8 10.7-10.6L42 44.1l2.5-2.4c7.5-7.2 18.2 3.4 10.7 10.6L42 64.5Z" fill="#08AEB4"/>
+  <text x="84" y="58" fill="#173C50" font-family="Arial, Helvetica, sans-serif" font-size="38" font-weight="700" letter-spacing="-1.8">QIDART</text>
+</svg>

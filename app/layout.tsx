@@ -3,21 +3,13 @@ import type { Metadata, Viewport } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'cuidarte. | Atención a domicilio para mayores',
-  description: 'Cuidado profesional y cercano a domicilio para personas mayores y dependientes. Atención 24/7 en Madrid.',
+  title: 'QIDART | Cuidarte es nuestra vocación',
+  description: 'Atención domiciliaria cercana y profesional para personas mayores y dependientes. Cuidarte es nuestra vocación.',
   generator: 'v0.app',
   icons: {
     icon: [
       {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg',
+        url: '/qidart-logo.svg',
         type: 'image/svg+xml',
       },
     ],
