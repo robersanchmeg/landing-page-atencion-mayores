@@ -16,7 +16,7 @@ import {
   UserRoundCheck,
   X,
 } from 'lucide-react'
-import { useState } from 'react'
+import { useState, type FormEvent } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -73,8 +73,43 @@ const values = [
 export default function Page() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [sent, setSent] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState('')
 
   const closeMenu = () => setMenuOpen(false)
+
+  const handleContactSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    setSubmitting(true)
+    setSubmitError('')
+
+    const formData = new FormData(event.currentTarget)
+
+    try {
+      const response = await fetch('/api/contactos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nombre: formData.get('nombre'),
+          telefono: formData.get('telefono'),
+          zona: formData.get('zona'),
+          servicio: formData.get('servicio'),
+        }),
+      })
+      const result = await response.json()
+
+      if (!response.ok) {
+        setSubmitError(result.error ?? 'No se pudo enviar la solicitud.')
+        return
+      }
+
+      setSent(true)
+    } catch {
+      setSubmitError('No se pudo enviar la solicitud. Comprueba tu conexión e inténtalo de nuevo.')
+    } finally {
+      setSubmitting(false)
+    }
+  }
 
   return (
     <main className="min-h-screen overflow-hidden bg-white text-[#173c50]">
@@ -270,26 +305,23 @@ export default function Page() {
               ) : (
                 <form
                   className="grid gap-5 sm:grid-cols-2"
-                  onSubmit={(event) => {
-                    event.preventDefault()
-                    setSent(true)
-                  }}
+                  onSubmit={handleContactSubmit}
                 >
                   <div className="grid gap-2">
                     <Label htmlFor="name">Nombre y apellidos</Label>
-                    <Input id="name" required placeholder="Cómo te llamas" />
+                    <Input id="name" name="nombre" required maxLength={120} placeholder="Cómo te llamas" />
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="phone">Teléfono</Label>
-                    <Input id="phone" required type="tel" placeholder="Tu número de teléfono" />
+                    <Input id="phone" name="telefono" required maxLength={40} type="tel" placeholder="Tu número de teléfono" />
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="zone">Zona / Municipio</Label>
-                    <Input id="zone" required placeholder="Ej. Pozuelo de Alarcón" />
+                    <Input id="zone" name="zona" required maxLength={120} placeholder="Ej. Pozuelo de Alarcón" />
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="service">Servicio que necesitas</Label>
-                    <Select required>
+                    <Select name="servicio" required>
                       <SelectTrigger id="service">
                         <SelectValue placeholder="Selecciona una opción" />
                       </SelectTrigger>
@@ -302,8 +334,11 @@ export default function Page() {
                     </Select>
                   </div>
                   <div className="sm:col-span-2">
-                    <Button type="submit" size="lg" className="h-14 w-full rounded-full bg-[#08aeb4] text-white hover:bg-[#078f97]">
-                      Solicitar presupuesto gratuito <ArrowRight data-icon="inline-end" />
+                    {submitError && (
+                      <p role="alert" className="mb-3 text-sm text-red-700">{submitError}</p>
+                    )}
+                    <Button type="submit" size="lg" disabled={submitting} className="h-14 w-full rounded-full bg-[#08aeb4] text-white hover:bg-[#078f97]">
+                      {submitting ? 'Enviando solicitud…' : 'Solicitar presupuesto gratuito'} {!submitting && <ArrowRight data-icon="inline-end" />}
                     </Button>
                     <p className="mt-3 text-center text-xs text-[#778991]">Al enviar aceptas nuestra política de privacidad.</p>
                   </div>

@@ -1,0 +1,23 @@
+datasource db {
+	provider = "postgresql"
+}
+
+generator client {
+	provider = "prisma-client-js"
+}
+
+enum ServicioContacto {
+	hours
+	night
+	medical
+	dependency
+}
+
+model Contacto {
+	id        String   @id @default(cuid())
+	nombre    String
+	telefono  String
+	zona      String
+	servicio  ServicioContacto
+	createdAt DateTime @default(now())
+}
