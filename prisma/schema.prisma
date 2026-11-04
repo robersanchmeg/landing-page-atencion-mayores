@@ -21,3 +21,15 @@ model Contacto {
 	servicio  ServicioContacto
 	createdAt DateTime @default(now())
 }
+
+model Candidatura {
+	id               String   @id @default(cuid())
+	nombre           String
+	telefono         String
+	email            String
+	mensaje          String
+	cvNombre         String
+	cv               Bytes
+	consentimientoEn DateTime @default(now())
+	createdAt        DateTime @default(now())
+}
