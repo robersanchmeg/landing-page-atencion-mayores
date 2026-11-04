@@ -52,6 +52,8 @@ const services = [
   },
 ]
 
+const maxCvSize = 3 * 1024 * 1024
+
 const values = [
   {
     icon: UserRoundCheck,
@@ -116,18 +118,43 @@ export default function Page() {
 
   const handleApplicationSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    setApplicationSubmitting(true)
     setApplicationError('')
+
+    const formData = new FormData(event.currentTarget)
+    const cv = formData.get('cv')
+
+    if (!(cv instanceof File) || cv.size === 0) {
+      setApplicationError('Adjunta tu CV en formato PDF.')
+      return
+    }
+
+    if (cv.size > maxCvSize) {
+      setApplicationError('El CV no puede superar los 3 MB. Reduce el tamaño del archivo e inténtalo de nuevo.')
+      return
+    }
+
+    if (cv.type !== 'application/pdf') {
+      setApplicationError('El CV debe estar en formato PDF.')
+      return
+    }
+
+    setApplicationSubmitting(true)
 
     try {
       const response = await fetch('/api/candidaturas', {
         method: 'POST',
-        body: new FormData(event.currentTarget),
+        body: formData,
       })
-      const result = await response.json()
+      const result = response.headers.get('content-type')?.includes('application/json')
+        ? await response.json()
+        : null
 
       if (!response.ok) {
-        setApplicationError(result.error ?? 'No se pudo enviar la candidatura.')
+        setApplicationError(
+          response.status === 413
+            ? 'El archivo es demasiado grande. Adjunta un CV PDF de hasta 3 MB.'
+            : result?.error ?? 'No se pudo enviar la candidatura.',
+        )
         return
       }
 
