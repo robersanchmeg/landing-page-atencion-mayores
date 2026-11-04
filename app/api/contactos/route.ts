@@ -1,4 +1,4 @@
-import { ServicioContacto } from "@prisma/client"
+import { Prisma, ServicioContacto } from "@prisma/client"
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 
@@ -60,7 +60,7 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error(
       "Failed to save contact request:",
-      error instanceof Error ? error.name : "Unknown error",
+      error instanceof Prisma.PrismaClientKnownRequestError ? error.code : "UNKNOWN",
     )
     return NextResponse.json(
       { error: "No se pudo guardar la solicitud. Inténtalo de nuevo más tarde." },
