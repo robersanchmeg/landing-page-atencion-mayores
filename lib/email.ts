@@ -1,7 +1,7 @@
 import nodemailer, { type SendMailOptions } from "nodemailer"
 import { ServicioContacto } from "@prisma/client"
 
-const defaultRecipient = "qidart@qidart.es"
+const defaultRecipients = ["qidart@qidart.es", "duverneycardozo@qidart.es"]
 
 function escapeHtml(value: string) {
   return value
@@ -29,9 +29,14 @@ async function sendEmail(options: Omit<SendMailOptions, "from" | "to">) {
     auth: { user, pass: password },
   })
 
+  const recipients = (process.env.SMTP_TO?.trim() || defaultRecipients.join(","))
+    .split(",")
+    .map((recipient) => recipient.trim())
+    .filter(Boolean)
+
   await transporter.sendMail({
     from: process.env.SMTP_FROM?.trim() || user,
-    to: process.env.SMTP_TO?.trim() || defaultRecipient,
+    to: recipients,
     ...options,
   })
 }
