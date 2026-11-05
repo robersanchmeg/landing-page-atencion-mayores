@@ -1,7 +1,7 @@
 import nodemailer, { type SendMailOptions } from "nodemailer"
 import { ServicioContacto } from "@prisma/client"
 
-const defaultRecipient = "billyandrade@qidart.es"
+const defaultRecipient = "qidart@qidart.es"
 
 function escapeHtml(value: string) {
   return value

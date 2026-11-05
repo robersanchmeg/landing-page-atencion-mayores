@@ -358,9 +358,9 @@ export default function Page() {
                   <a href="tel:+34746054994" className="text-lg font-semibold text-white">+34 746 05 49 94</a>
                 </div>
               </div>
-              <a href="mailto:billyandrade@qidart.es" className="flex items-center gap-3 text-white hover:text-[#61dcda]">
+              <a href="mailto:qidart@qidart.es" className="flex items-center gap-3 text-white hover:text-[#61dcda]">
                 <Mail className="size-5 shrink-0" aria-hidden="true" />
-                billyandrade@qidart.es
+                qidart@qidart.es
               </a>
             </div>
           </div>
@@ -519,7 +519,7 @@ export default function Page() {
             <div className="mt-4 flex flex-col gap-2 text-sm">
               <a href="tel:+34746066542" className="hover:text-white">+34 746 06 65 42</a>
               <a href="tel:+34746054994" className="hover:text-white">+34 746 05 49 94</a>
-              <a href="mailto:billyandrade@qidart.es" className="hover:text-white">billyandrade@qidart.es</a>
+              <a href="mailto:qidart@qidart.es" className="hover:text-white">qidart@qidart.es</a>
               <a href="#trabaja-con-nosotros" className="hover:text-white">Trabaja con nosotros</a>
               <span>Lunes a domingo, 24 horas</span>
             </div>
