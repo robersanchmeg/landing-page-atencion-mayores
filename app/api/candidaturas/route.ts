@@ -1,5 +1,6 @@
 import { Prisma } from "@prisma/client"
 import { NextResponse } from "next/server"
+import { sendApplicationNotification } from "@/lib/email"
 import { prisma } from "@/lib/prisma"
 
 const maxCvSize = 3 * 1024 * 1024
@@ -63,7 +64,7 @@ export async function POST(request: Request) {
     .slice(0, 255)
 
   try {
-    await prisma.candidatura.create({
+    const candidatura = await prisma.candidatura.create({
       data: {
         nombre: nombre.trim(),
         telefono: telefono.trim(),
@@ -74,7 +75,24 @@ export async function POST(request: Request) {
       },
     })
 
-    return NextResponse.json({ success: true }, { status: 201 })
+    try {
+      await sendApplicationNotification(candidatura)
+      return NextResponse.json({ success: true, notificationSent: true }, { status: 201 })
+    } catch (error) {
+      console.error(
+        "Failed to send application email notification:",
+        error instanceof Error ? error.message : "UNKNOWN",
+      )
+      return NextResponse.json(
+        {
+          success: true,
+          notificationSent: false,
+          warning:
+            "Hemos guardado tu candidatura, pero no se pudo enviar el aviso al equipo por correo. No la envíes de nuevo; llámanos para confirmarla.",
+        },
+        { status: 202 },
+      )
+    }
   } catch (error) {
     console.error(
       "Failed to save job application:",

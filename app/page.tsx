@@ -7,6 +7,7 @@ import {
   Clock3,
   FileText,
   HeartHandshake,
+  Mail,
   Menu,
   MessageCircle,
   Moon,
@@ -77,9 +78,11 @@ export default function Page() {
   const [sent, setSent] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState('')
+  const [contactEmailWarning, setContactEmailWarning] = useState('')
   const [applicationSent, setApplicationSent] = useState(false)
   const [applicationSubmitting, setApplicationSubmitting] = useState(false)
   const [applicationError, setApplicationError] = useState('')
+  const [applicationEmailWarning, setApplicationEmailWarning] = useState('')
 
   const closeMenu = () => setMenuOpen(false)
 
@@ -108,6 +111,7 @@ export default function Page() {
         return
       }
 
+      setContactEmailWarning(result.notificationSent === false ? result.warning : '')
       setSent(true)
     } catch {
       setSubmitError('No se pudo enviar la solicitud. Comprueba tu conexión e inténtalo de nuevo.')
@@ -158,6 +162,7 @@ export default function Page() {
         return
       }
 
+      setApplicationEmailWarning(result?.notificationSent === false ? result.warning : '')
       setApplicationSent(true)
     } catch {
       setApplicationError('No se pudo enviar la candidatura. Comprueba tu conexión e inténtalo de nuevo.')
@@ -189,9 +194,9 @@ export default function Page() {
             <a className="font-medium text-[#526c79] transition hover:text-[#08aeb4]" href="#trabaja-con-nosotros" onClick={closeMenu}>Trabaja con nosotros</a>
           </nav>
           <div className="hidden shrink-0 items-center gap-5 lg:flex">
-            <a href="tel:+34900123456" className="flex items-center gap-2 font-semibold text-[#173c50]">
+            <a href="tel:+34746066542" className="flex items-center gap-2 font-semibold text-[#173c50]">
               <Phone className="size-4 text-[#08aeb4]" aria-hidden="true" />
-              900 123 456
+              +34 746 06 65 42
             </a>
             <Button nativeButton={false} render={<a href="#contacto" />} className="rounded-full bg-[#08aeb4] px-5 text-white hover:bg-[#078f97]">
               Hablemos
@@ -345,9 +350,18 @@ export default function Page() {
             <p className="mt-5 max-w-md text-lg leading-8 text-[#d0e0e4]">
               Cuéntanos un poco qué necesitas. Nos pondremos en contacto para encontrar la mejor solución para tu familia.
             </p>
-            <div className="mt-8 flex items-center gap-3 text-[#61dcda]">
-              <Phone className="size-5" aria-hidden="true" />
-              <a href="tel:+34900123456" className="text-xl font-semibold text-white">900 123 456</a>
+            <div className="mt-8 flex flex-col gap-3 text-[#61dcda]">
+              <div className="flex items-center gap-3">
+                <Phone className="size-5 shrink-0" aria-hidden="true" />
+                <div className="flex flex-col gap-1">
+                  <a href="tel:+34746066542" className="text-lg font-semibold text-white">+34 746 06 65 42</a>
+                  <a href="tel:+34746054994" className="text-lg font-semibold text-white">+34 746 05 49 94</a>
+                </div>
+              </div>
+              <a href="mailto:qidartbien@gmail.com" className="flex items-center gap-3 text-white hover:text-[#61dcda]">
+                <Mail className="size-5 shrink-0" aria-hidden="true" />
+                qidartbien@gmail.com
+              </a>
             </div>
           </div>
           <Card className="rounded-3xl border-0 bg-white text-[#173c50] shadow-2xl">
@@ -357,6 +371,7 @@ export default function Page() {
                   <span className="flex size-14 items-center justify-center rounded-full bg-[#e4f8f6] text-[#078f97]"><Check /></span>
                   <h3 className="mt-5 text-2xl font-bold">¡Gracias por escribirnos!</h3>
                   <p className="mt-2 text-[#60757d]">Te llamaremos muy pronto para hablar contigo.</p>
+                  {contactEmailWarning && <p role="status" className="mt-4 text-sm text-amber-700">{contactEmailWarning}</p>}
                 </div>
               ) : (
                 <form
@@ -423,6 +438,7 @@ export default function Page() {
                   <span className="flex size-14 items-center justify-center rounded-full bg-[#e4f8f6] text-[#078f97]"><Check /></span>
                   <h3 className="mt-5 text-2xl font-bold">¡Gracias por tu interés!</h3>
                   <p className="mt-2 text-[#60757d]">Hemos recibido tu candidatura y la tendremos en cuenta.</p>
+                  {applicationEmailWarning && <p role="status" className="mt-4 text-sm text-amber-700">{applicationEmailWarning}</p>}
                 </div>
               ) : (
                 <form className="grid gap-5 sm:grid-cols-2" onSubmit={handleApplicationSubmit}>
@@ -501,8 +517,9 @@ export default function Page() {
           <div>
             <h3 className="font-bold text-white">Contacto</h3>
             <div className="mt-4 flex flex-col gap-2 text-sm">
-              <a href="tel:+34900123456" className="hover:text-white">900 123 456</a>
-              <a href="mailto:hola@cuidarte.es" className="hover:text-white">hola@cuidarte.es</a>
+              <a href="tel:+34746066542" className="hover:text-white">+34 746 06 65 42</a>
+              <a href="tel:+34746054994" className="hover:text-white">+34 746 05 49 94</a>
+              <a href="mailto:qidartbien@gmail.com" className="hover:text-white">qidartbien@gmail.com</a>
               <a href="#trabaja-con-nosotros" className="hover:text-white">Trabaja con nosotros</a>
               <span>Lunes a domingo, 24 horas</span>
             </div>
@@ -510,6 +527,24 @@ export default function Page() {
           <div>
             <h3 className="font-bold text-white">Estamos cerca</h3>
             <p className="mt-4 text-sm leading-6">Madrid y municipios de la Comunidad de Madrid.</p>
+            <div className="mt-4 flex flex-col gap-3 text-sm">
+              <a
+                href="https://www.instagram.com/qidart_official/"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 hover:text-white"
+              >
+                Instagram: @QidarT_Official
+              </a>
+              <a
+                href="https://www.facebook.com/search/top/?q=QidarT%20Bien"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 hover:text-white"
+              >
+                Facebook: QidarT Bien
+              </a>
+            </div>
             <div className="mt-3 flex gap-4 text-sm">
               <a href="#" className="underline underline-offset-4 hover:text-white">Aviso legal</a>
               <a href="#" className="underline underline-offset-4 hover:text-white">Privacidad</a>
@@ -518,7 +553,7 @@ export default function Page() {
         </div>
         <div className="mx-auto mt-10 max-w-7xl border-t border-white/10 pt-5 text-xs text-[#9bb0b7]">© 2026 QIDART. Todos los derechos reservados.</div>
       </footer>
-      <a href="https://wa.me/34900123456" aria-label="Contactar por WhatsApp" className="fixed bottom-5 right-5 z-30 flex size-14 items-center justify-center rounded-full bg-[#25d366] text-white shadow-xl transition-transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-[#25d366]/40">
+      <a href="https://wa.me/34746066542" aria-label="Contactar por WhatsApp" className="fixed bottom-5 right-5 z-30 flex size-14 items-center justify-center rounded-full bg-[#25d366] text-white shadow-xl transition-transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-[#25d366]/40">
         <MessageCircle className="size-7 fill-white" aria-hidden="true" />
       </a>
     </main>

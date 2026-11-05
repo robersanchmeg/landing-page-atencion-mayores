@@ -1,5 +1,6 @@
 import { Prisma, ServicioContacto } from "@prisma/client"
 import { NextResponse } from "next/server"
+import { sendContactNotification } from "@/lib/email"
 import { prisma } from "@/lib/prisma"
 
 function isContactoRequest(
@@ -47,7 +48,7 @@ export async function POST(request: Request) {
   }
 
   try {
-    await prisma.contacto.create({
+    const contacto = await prisma.contacto.create({
       data: {
         nombre: body.nombre.trim(),
         telefono: body.telefono.trim(),
@@ -56,7 +57,24 @@ export async function POST(request: Request) {
       },
     })
 
-    return NextResponse.json({ success: true }, { status: 201 })
+    try {
+      await sendContactNotification(contacto)
+      return NextResponse.json({ success: true, notificationSent: true }, { status: 201 })
+    } catch (error) {
+      console.error(
+        "Failed to send contact email notification:",
+        error instanceof Error ? error.message : "UNKNOWN",
+      )
+      return NextResponse.json(
+        {
+          success: true,
+          notificationSent: false,
+          warning:
+            "Hemos guardado tu solicitud, pero no se pudo enviar el aviso al equipo por correo. No la envíes de nuevo; llámanos para confirmarla.",
+        },
+        { status: 202 },
+      )
+    }
   } catch (error) {
     console.error(
       "Failed to save contact request:",
