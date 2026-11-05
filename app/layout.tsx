@@ -3,8 +3,12 @@ import type { Metadata, Viewport } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'QIDART | Cuidarte es nuestra vocación',
-  description: 'Atención domiciliaria cercana y profesional para personas mayores y dependientes. Cuidarte es nuestra vocación.',
+  metadataBase: new URL('https://www.qidart.es'),
+  title: 'Cuidado de Personas Mayores a Domicilio en Madrid | QIDART',
+  description: 'Atención y cuidado a domicilio para personas mayores y dependientes en Madrid. Cuidado profesional, cercano y adaptado a cada familia.',
+  alternates: {
+    canonical: '/',
+  },
   generator: 'v0.app',
   icons: {
     icon: [
